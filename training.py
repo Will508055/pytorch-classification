@@ -4,15 +4,14 @@ import torch.optim as optim
 import numpy as np
 import copy
 from sklearn.model_selection import StratifiedKFold
-
-from nn_architectures import wide_nn
+from nn_architectures import wide_nn, deep_nn
 
 
 def train_model(model, x_train, y_train, x_val, y_val, print_output=False):
     loss_function = nn.BCELoss()                                                       # binary cross entropy
-    optimizer = optim.Adam(model.parameters(), lr=0.001)                               # Adam optimizer
+    optimizer = optim.Adam(model.parameters(), lr=0.0001)                               # Adam optimizer
  
-    n_epochs = 30
+    n_epochs = 50
     batch_size = 500
     batch_start = torch.arange(0, len(x_train), batch_size)                            # Batch start indices
  
@@ -87,11 +86,11 @@ def kfold_cv(model, x_train, y_train):
     print(f"Model accuracy: {accuracy:.2f}% (+/- {std:.2f}%)")
 
     # Save the best model
-    if hasattr(best_model, 'wide_nn'):
+    if isinstance(best_model, wide_nn):
         torch.save(best_model.state_dict(), 'wide_nn.pth')
-    elif hasattr(best_model, 'deep_nn'):
+    elif isinstance(best_model, deep_nn):
         torch.save(best_model.state_dict(), 'deep_nn.pth')
     else:
         torch.save(best_model.state_dict(), 'custom_nn.pth')
 
-    return None
+    return accuracy

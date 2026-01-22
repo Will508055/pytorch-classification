@@ -1,0 +1,4 @@
+Baseline Accuracy: 0.3697
+ROC-AUC: 0.8434
+PR-AUC: 0.7391
+F1 Score: 0.8061
